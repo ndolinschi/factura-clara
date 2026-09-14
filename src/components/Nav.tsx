@@ -4,6 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { t } from "@/lib/i18n";
 import { useAppStore } from "@/store/useAppStore";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import { ShinyText } from "@/components/ShinyText";
 
 const links = [
   { href: "/", key: "navDashboard" as const },
@@ -26,8 +34,8 @@ export function Nav() {
               FC
             </span>
             <div>
-              <div className="text-sm font-semibold text-slate-900">
-                {t(locale, "appTitle")}
+              <div className="text-sm font-bold text-slate-900">
+                <ShinyText text={t(locale, "appTitle")} />
               </div>
               <div className="hidden text-xs text-slate-500 sm:block">
                 {t(locale, "tagline")}
@@ -36,51 +44,92 @@ export function Nav() {
           </Link>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-1">
+        {/* Desktop Nav */}
+        <nav className="hidden sm:flex flex-wrap items-center gap-1">
           {links.map((l) => {
             const active =
               l.href === "/"
                 ? pathname === "/"
                 : pathname.startsWith(l.href);
             return (
-              <Link
+              <Button
                 key={l.href}
-                href={l.href}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                  active
-                    ? "bg-emerald-50 text-emerald-800"
-                    : "text-slate-600 hover:bg-slate-100"
-                }`}
+                asChild
+                variant={active ? "default" : "ghost"}
+                size="sm"
               >
-                {t(locale, l.key)}
-              </Link>
+                <Link href={l.href}>{t(locale, l.key)}</Link>
+              </Button>
             );
           })}
           <div className="ml-2 flex rounded-lg border border-slate-200 p-0.5 text-xs font-semibold">
-            <button
+            <Button
               type="button"
+              variant={locale === "ro" ? "default" : "ghost"}
+              size="sm"
               onClick={() => setLocale("ro")}
-              className={`rounded-md px-2 py-1 ${
-                locale === "ro"
-                  ? "bg-slate-900 text-white"
-                  : "text-slate-600"
-              }`}
+              className="h-7 px-2 text-xs"
             >
               RO
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant={locale === "ru" ? "default" : "ghost"}
+              size="sm"
               onClick={() => setLocale("ru")}
-              className={`rounded-md px-2 py-1 ${
-                locale === "ru"
-                  ? "bg-slate-900 text-white"
-                  : "text-slate-600"
-              }`}
+              className="h-7 px-2 text-xs"
             >
               RU
-            </button>
+            </Button>
           </div>
         </nav>
+
+        {/* Mobile Nav */}
+        <Sheet>
+          <SheetTrigger asChild className="sm:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:hidden">
+            <nav className="flex flex-col gap-2 mt-8">
+              {links.map((l) => {
+                const active =
+                  l.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(l.href);
+                return (
+                  <Button
+                    key={l.href}
+                    asChild
+                    variant={active ? "default" : "ghost"}
+                    className="justify-start"
+                  >
+                    <Link href={l.href}>{t(locale, l.key)}</Link>
+                  </Button>
+                );
+              })}
+              <div className="flex gap-2 mt-4">
+                <Button
+                  type="button"
+                  variant={locale === "ro" ? "default" : "outline"}
+                  onClick={() => setLocale("ro")}
+                  className="flex-1"
+                >
+                  RO
+                </Button>
+                <Button
+                  type="button"
+                  variant={locale === "ru" ? "default" : "outline"}
+                  onClick={() => setLocale("ru")}
+                  className="flex-1"
+                >
+                  RU
+                </Button>
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

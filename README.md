@@ -20,8 +20,13 @@ See [SPEC.md](./SPEC.md) for the full product spec.
 
 ## Stack
 
-- Next.js (App Router) + TypeScript + Tailwind CSS
-- Zustand + `persist` middleware
+- Next.js (App Router) + TypeScript + Tailwind CSS v4
+- shadcn/ui components (Radix UI primitives)
+- GSAP + `@gsap/react` for subtle client-side card entrance animations
+- React Bits accents (`ShinyText` subtle shimmer on logo title)
+- Sonner toasts
+- Lucide React icons
+- Zustand + `persist` middleware (local-first browser storage)
 
 ## Routes
 
